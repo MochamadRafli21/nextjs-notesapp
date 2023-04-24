@@ -1,22 +1,55 @@
 'use client'
+import {atom, useAtom} from 'jotai'
+import React, {useTransition} from 'react'
+import { notesId } from './notescard'
+import { useRouter } from 'next/navigation';
 
-import React, {useState} from 'react'
+export const modalDisplayed = atom(false)
+export const currentTitle = atom('')
+export const currentContent = atom('')
+
 export default function NotesModal ()  {
-    const [isDisplay, setIsDisplay] = useState(false)
-    const [title, setTitle] = useState("")
-    const [content, setContent] = useState("")
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+
+    const [isDisplay, setIsDisplay] = useAtom(modalDisplayed)
+    const [title, setTitle] = useAtom(currentTitle)
+    const [content, setContent] = useAtom(currentContent)
+    const [currentNotes] = useAtom(notesId)
     const updateDisplay = ()=>{
         setIsDisplay(!isDisplay)
     }
-    async function createNotes(e: React.FormEvent){
+
+    async function submitNotes(e: React.FormEvent){
         e.preventDefault()
-        const data = await fetch(`/api/notes`,{
-            method: "POST",
-            body: JSON.stringify({title, content})
-        })
+        if(currentNotes){
+            const data = await fetch(`/api/notes/${currentNotes}`,{
+                    method: "PUT",
+                    body: JSON.stringify({title, content})
+                })
         if(!data.ok){
             console.log(data)
             return
+        }
+        startTransition(() => {
+            // Refresh the current route and fetch new data from the server without
+            // losing client-side browser or React state.
+            router.refresh();
+        });
+        }else{
+           const data = await fetch(`/api/notes`,{
+                method: "POST",
+                body: JSON.stringify({title, content})
+            })
+        if(!data.ok){
+            console.log(data)
+            return
+        }
+        startTransition(() => {
+            // Refresh the current route and fetch new data from the server without
+            // losing client-side browser or React state.
+            router.refresh();
+        });
         }
         setTitle('')
         setContent('')
@@ -26,7 +59,7 @@ export default function NotesModal ()  {
     return (
             <>
             {isDisplay? <div className='z-10 h-screen flex mx-auto items-center: justify-center w-full bg-gray-50' >
-            <form onSubmit={createNotes} className='bg-white h-fit  flex flex-col justify-center items-center '> 
+            <form onSubmit={submitNotes} className='bg-white h-fit  flex flex-col justify-center items-center '> 
             <input placeholder='title' onChange={(e)=> setTitle(e.target.value)} value={title} />
             <textarea placeholder='content' onChange={(e)=> setContent(e.target.value)} value={content}/>
             <div className='justify-end py-2'>

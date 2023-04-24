@@ -20,7 +20,7 @@ export async function PUT(request: Request, { params }: {
 export async function GET({ params }: {
   params: { notesId: number }
 }) {
-  const id = parseInt(params.notesId); // 'a', 'b', or 'c'
+  const id = parseInt(params.notesId);
   const data = await prisma.note.findUnique({
     where:{
         id
