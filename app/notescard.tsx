@@ -27,7 +27,7 @@ export default function NotesCard(props: cardInfo) {
     }
     return (
         <>
-        <div onClick={updateDetail} className='w-[230px] border-2 border-gray-200 px-2 py-4 rounded-lg ' key={props.id}>
+        <div onClick={updateDetail} className='w-full md:w-[230px] border-2 border-gray-200 px-2 py-4 rounded-lg ' key={props.id}>
         <h2 className='border-b-2 border-b-cyan-200'><b> {props.title}</b></h2>
         <p className='text-ellipsis'> {props.content}</p>
         </div>

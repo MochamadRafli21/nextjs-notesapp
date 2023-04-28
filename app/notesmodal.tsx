@@ -46,10 +46,14 @@ export default function NotesModal ()  {
     }
     return (
             <>
-            {isDisplay? <div className='z-10 h-screen flex mx-auto items-center: justify-center w-full bg-gray-50' >
-            <form onSubmit={submitNotes} className='bg-white h-fit  flex flex-col justify-center items-center '> 
-            <input placeholder='title' onChange={(e)=> setTitle(e.target.value)} value={title} />
-            <textarea placeholder='content' onChange={(e)=> setContent(e.target.value)} value={content}/>
+            {isDisplay? <div className='z-10 h-screen flex mx-auto items-center: justify-center items-center w-full bg-opacity-10' >
+            <form onSubmit={submitNotes} className='bg-white h-fit border-gray-400 border-2 p-4 rounded-xl   flex flex-col justify-center items-center '>
+            <div className='flex flex-col'>
+            <label>Title</label>
+            <input id="title" placeholder='title' className='bg-cyan-50 p-2 rounded-lg border-2 border-gray-100' onChange={(e)=> setTitle(e.target.value)} value={title} />
+            <label>Content</label>
+            <textarea rows={6} cols={40} placeholder='content' className='bg-cyan-50 p-2 rounded-lg border-2 border-gray-100/' onChange={(e)=> setContent(e.target.value)} value={content}/>
+            </div>
             <div className='justify-end py-2'>
                 <button type='button' onClick={updateDisplay} className='px-4 py-2 mx-2 rounded-lg bg-gray-50 text-red-500 border-gray-400'>Cancel</button>
                 <button type='submit' className='px-4 py-2 rounded-lg bg-cyan-200'>Create Notes</button>

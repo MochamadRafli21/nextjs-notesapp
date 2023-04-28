@@ -33,7 +33,7 @@ export default function Home() {
     console.log(notes)
     return (
     <>
-    <div className="flex flex-wrap px-8 gap-4">
+    <div className="flex flex-wrap px-4 gap-2 justify-center md:justify-start">
         {notes.map((note) => <NotesCard id={note.id} title={note.title} content={note.content}/>)}
     </div>
     </>
