@@ -3,7 +3,7 @@ import prisma from "../../../../prisma/client"
 export async function PUT(request: Request, { params }: {
   params: { notesId: number }
 }) {
-  const id = parseInt(params.notesId);
+  const id = parseInt( params.notesId );
   const {title, content} = await request.json()
   const res = await prisma.note.update({
     where:{

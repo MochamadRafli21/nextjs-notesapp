@@ -1,19 +1,38 @@
+'use client'
+
+import { atom, useAtom } from 'jotai'
 import NotesCard from './notescard'
+import { useEffect } from 'react'
 
-async function getNotes(){
-        const data = await fetch(`${process.env.BASE_URL}api/notes`)
-        if(!data.ok){
-            console.log(data)
-        }
-        return data.json()
+type NoteItem = {
+id: number,
+    title: string,
+    content: string | undefined
+}
+
+const initialNote = atom<NoteItem[]>([]) 
+
+export const fetchNotes = atom(
+    (get) => (get(initialNote)),
+    async (_get, set) => {
+        const res = await fetch("/api/notes")
+        set(initialNote, (await res.json()))
     }
+)
 
 
-export default async function Home() {
-    let notes: {id:number, title:string, content:string|undefined}[] = await getNotes()
+export default function Home() {
+    const [notes, update] =  useAtom(fetchNotes)
+    useEffect(() => {
+        const renderList = async() => {
+            await update()
+        }
+
+        renderList()
+        }, [])
+    console.log(notes)
     return (
     <>
-
     <div className="flex flex-wrap px-8 gap-4">
         {notes.map((note) => <NotesCard id={note.id} title={note.title} content={note.content}/>)}
     </div>

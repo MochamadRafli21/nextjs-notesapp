@@ -1,17 +1,15 @@
 'use client'
-import {atom, useAtom} from 'jotai'
-import React, {useTransition} from 'react'
+import {atom, useAtom, useSetAtom} from 'jotai'
+import React from 'react'
 import { notesId } from './notescard'
-import { useRouter } from 'next/navigation';
+import { fetchNotes } from './noteslist'
 
 export const modalDisplayed = atom(false)
 export const currentTitle = atom('')
 export const currentContent = atom('')
 
 export default function NotesModal ()  {
-    const [isPending, startTransition] = useTransition();
-    const router = useRouter();
-
+    const update = useSetAtom(fetchNotes)
     const [isDisplay, setIsDisplay] = useAtom(modalDisplayed)
     const [title, setTitle] = useAtom(currentTitle)
     const [content, setContent] = useAtom(currentContent)
@@ -31,11 +29,6 @@ export default function NotesModal ()  {
             console.log(data)
             return
         }
-        startTransition(() => {
-            // Refresh the current route and fetch new data from the server without
-            // losing client-side browser or React state.
-            router.refresh();
-        });
         }else{
            const data = await fetch(`/api/notes`,{
                 method: "POST",
@@ -45,16 +38,11 @@ export default function NotesModal ()  {
             console.log(data)
             return
         }
-        startTransition(() => {
-            // Refresh the current route and fetch new data from the server without
-            // losing client-side browser or React state.
-            router.refresh();
-        });
         }
         setTitle('')
         setContent('')
         updateDisplay()
-
+        update()
     }
     return (
             <>

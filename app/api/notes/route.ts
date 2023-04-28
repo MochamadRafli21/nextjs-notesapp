@@ -8,10 +8,12 @@ type NotePayload = {
 export async function GET() {
     try{
         const data = await prisma.note.findMany()
+        console.log(data)
         return new Response(JSON.stringify(data),{
             status: 200
         })
     }catch(error){
+        console.log(error)
         return new Response(JSON.stringify({"message": error}),{
             status: 400
         })
@@ -36,7 +38,7 @@ export async function POST(request: Request){
         })
 
         if(data){
-            return new Response(JSON.stringify({"data":{"title":title, "content":content}}), {status: 201})
+            return new Response(JSON.stringify(data), {status: 201})
         }
     }catch(error){
         return new Response(JSON.stringify({error}), {status: 400})
