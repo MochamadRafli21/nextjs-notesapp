@@ -1,6 +1,7 @@
 import prisma from "../../../prisma/client"
 
 type NotePayload = {
+    userId: number
     title: string
     content: string | undefined
 }
@@ -8,7 +9,6 @@ type NotePayload = {
 export async function GET() {
     try{
         const data = await prisma.note.findMany()
-        console.log(data)
         return new Response(JSON.stringify(data),{
             status: 200
         })
@@ -33,12 +33,13 @@ export async function POST(request: Request){
         const data = await prisma.note.create({
             data:{
                 title,
-                content
+                content,
+                ownerId : 1
             }
         })
 
         if(data){
-            return new Response(JSON.stringify(data), {status: 201})
+            return new Response(JSON.stringify({data}), {status: 201})
         }
     }catch(error){
         return new Response(JSON.stringify({error}), {status: 400})
