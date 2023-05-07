@@ -32,10 +32,10 @@ export default function Home() {
         }, [])
     console.log(notes)
     return (
-    <>
-    <div className="flex flex-wrap px-4 gap-2 justify-center md:justify-start">
-        {notes.map((note) => <NotesCard id={note.id} title={note.title} content={note.content}/>)}
-    </div>
+      <>
+        <div className="flex flex-wrap px-4 gap-2 justify-center md:justify-start">
+        {notes.length ? notes.map((note) => <NotesCard id={note.id} title={note.title} content={note.content}/>): <p className='mx-auto'>You dont have any notes!</p>}
+      </div>
     </>
-  )
+    )
 }

@@ -1,6 +1,5 @@
 import prisma from "@/prisma/client";
 import * as argon from "argon2";
-import { errorToJSON } from "next/dist/server/render";
 
 type registerPayload = {
   fullname: string,
